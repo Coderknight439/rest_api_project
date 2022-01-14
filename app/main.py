@@ -4,6 +4,7 @@ from app.routers import api_router
 from app.config import settings
 import uvicorn
 from fastapi.staticfiles import StaticFiles
+from app.tasks import populate_database
 
 
 def get_application():
@@ -29,3 +30,4 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 if __name__ == "__main__":
     uvicorn.run('app.main:app', host="0.0.0.0", port=9000, reload=True)
+    populate_database.delay()

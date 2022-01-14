@@ -3,8 +3,6 @@ Model Class For School Grade Data
 """
 
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.sql.expression import text
-from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.ext.declarative import declared_attr
 from app.db.base_class import Base
 

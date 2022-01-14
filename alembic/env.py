@@ -80,7 +80,7 @@ def run_migrations_online():
 		# drop testing db if it exists and create a fresh one
 		with default_engine.connect() as default_conn:
 			default_conn.execute(
-				f"select pg_terminate_backend(pid) from pg_stat_activity where datname='{settings.POSTGRES_DB}_test'")
+				f"select pg_terminate_backend(pid) from pg_stat_activity where datname={settings.POSTGRES_DB}_test")
 			default_conn.execute(f"DROP DATABASE IF EXISTS {settings.POSTGRES_DB}_test")
 			default_conn.execute(f"CREATE DATABASE {settings.POSTGRES_DB}_test")
 	connectable = engine_from_config(

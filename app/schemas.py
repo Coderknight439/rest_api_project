@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
+from typing import List
 
 
 class SchoolGradeDataOutSchema(BaseModel):
@@ -8,37 +9,40 @@ class SchoolGradeDataOutSchema(BaseModel):
 	category:  str
 	year:  str
 	total_enrollment:  int
-	grade_k:  str
-	grade_1:  str
-	grade_2:  str
-	grade_3:  str
-	grade_4:  str
-	grade_5:  str
-	grade_6:  str
-	grade_7:  str
-	grade_8:  str
-	male_count:  str
-	female_count:  str
-	asian_count:  str
-	black_count:  str
-	hispanic_count:  str
-	other_count:  str
-	white_count:  str
-	ela_test_takers:  str
-	ela_l1:  str
-	ela_l2:  str
-	ela_l3:  str
-	ela_l4:  str
-	ela_l3_l4:  str
-	math_test_takers:  str
-	math_l1:  str
-	math_l2:  str
-	math_l3:  str
-	math_l4:  str
-	math_l3_l4:  str
+	grade_k:  int
+	grade_1:  int
+	grade_2:  int
+	grade_3:  int
+	grade_4:  int
+	grade_5:  int
+	grade_6:  int
+	grade_7:  int
+	grade_8:  int
+	male_count:  int
+	female_count:  int
+	asian_count:  int
+	black_count:  int
+	hispanic_count:  int
+	other_count:  int
+	white_count:  int
+	ela_test_takers:  int
+	ela_l1:  int
+	ela_l2:  int
+	ela_l3:  int
+	ela_l4:  int
+	ela_l3_l4:  int
+	math_test_takers:  int
+	math_l1:  int
+	math_l2:  int
+	math_l3:  int
+	math_l4:  int
+	math_l3_l4:  int
 	
 	
 	class Config:
 		orm_mode = True
+	
 
+class DataTableSchema(BaseModel):
+	data: List[SchoolGradeDataOutSchema]
 

@@ -39,7 +39,8 @@ services:
       postgres:
         condition: service_healthy
     command: >
-      bash -c "alembic upgrade head
+      bash -c "alembic revision --autogenerate -m 'query added'
+      && alembic upgrade head
       && uvicorn app.main:app --host 0.0.0.0 --port 9000 --reload"
 
     healthcheck:
@@ -61,5 +62,5 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
-      web:
+      postgres:
         condition: service_healthy

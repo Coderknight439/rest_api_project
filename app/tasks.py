@@ -1,17 +1,10 @@
 import os
 import time
-
+import csv
 from celery import Celery
-import psycopg2
-from app.config import settings
+from app.database import get_session
+from app.models import SchoolGradeData
 
-connection = psycopg2.connect(
-		f"host='{settings.POSTGRES_SERVER}'"
-		f"dbname='{settings.POSTGRES_DB}'"
-		f"user='{settings.POSTGRES_USER}'"
-		f"password='{settings.POSTGRES_PASSWORD}'"
-)
-cursor = connection.cursor()
 
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
@@ -26,9 +19,14 @@ def create_task(task_type):
 
 @celery.task(name='populate_database')
 def populate_database():
-	with open('../grade_data.csv', 'r') as f:
-		next(f)  # Skip the header row.
-		cursor.copy_from(f, 'school_grade_data', sep=',')
-	
-	connection.commit()
+	db = get_session()
+	reader = csv.DictReader(open(os.path.join("grade_data.csv")))
+	data_list = []
+	data = db.query(SchoolGradeData).count()
+	if data <= 0:
+		for raw in reader:
+			data_list.append(raw)
+		session = get_session()
+		session.execute(SchoolGradeData.__table__.insert().values(data_list))
+		session.commit()
 	return True
