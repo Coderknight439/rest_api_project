@@ -8,10 +8,75 @@
   <div>
     <h3>Data List</h3>
     <p>These are Backend from Service</p>
+    <div>
+        <form>
+          <label>Category</label>
+          <input id="category" name="religion" type="text">
+          <label>Gender</label>
+          <input id="sex" name="religion" type="text">
+          <label>Race</label>
+          <input id="race" name="religion" type="text">
+          <button type="submit" class="btn-primary">Search</button>
+        </form>
+      </div>
+    <div class="btn-group flex" role="group" aria-label="Data Source">
+        <table id="test" class="display" style="width:100%">
+          <thead>
+          <tr>
+            <th>DBN</th>
+            <th>School</th>
+            <th>Year</th>
+            <th>Category</th>
+            <th>Total Enroll</th>
+            <th>Male Count</th>
+            <th>Female Count</th>
+            <th>Asian Count</th>
+            <th>Other Count</th>
+            <th>ELA Test Taker</th>
+            <th>Math Test Taker</th>
+          </tr>
+          </thead>
+        </table>
+    </div>
   </div>
   <br><br>
 </div>
 
 {% endblock %}
 {% block js %}
+<script>
+    $('#test').DataTable( {
+        processing: true,
+        serverSide: true,
+        ajax: {
+          "url": "/api/get_data/",
+          "type": "GET",
+          data: function ( data ) {
+            data['columns_map'] = {};
+            data['columns'].forEach(function(item, index) {
+                data['columns_map'][item.data] = data['columns'][index];
+            });
+            data['order'].forEach(function(item, index) {
+                data['order'][index]['column'] = data['columns'][item.column]['data'];
+            });
+            return {"data": JSON.stringify(data)};
+        }
+        },
+        columns: [
+            { data: 'code'},
+            { data: "school_name" },
+            { data: "year" },
+            { data: "category" },
+            { data: "total_enrollment" },
+            { data: "male_count" },
+            { data: "female_count" },
+            { data: "asian_count" },
+            { data: "other_count" },
+            { data: "ela_test_takers" },
+            { data: "math_test_takers" },
+        ],
+        select: false,
+        searching: false
+    } );
+</script>
 {% endblock %}
