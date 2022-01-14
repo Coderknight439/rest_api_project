@@ -52,7 +52,9 @@ services:
     build:
       dockerfile: Dockerfile
       context: ""
-    command: celery -A app.tasks worker --loglevel INFO --logfile=app/logs/celery.log
+    command: >
+      bash -c "celery -A app.tasks worker --loglevel INFO --logfile=app/logs/celery.log
+      && python -m app.run_start_task.py"
     volumes:
       - ./app:/usr/src/app
     environment:
